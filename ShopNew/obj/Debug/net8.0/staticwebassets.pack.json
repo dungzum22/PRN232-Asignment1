@@ -1,0 +1,301 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\ShopNew.bundle.scp.css",
+      "PackagePath": "staticwebassets\\ShopNew.bundle.scp.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\uploads\\images\\110c66f4-6e34-4719-b2c3-d1a19b9d56ee_photo_2025-08-12_13-43-50.jpg",
+      "PackagePath": "staticwebassets\\uploads\\images\\110c66f4-6e34-4719-b2c3-d1a19b9d56ee_photo_2025-08-12_13-43-50.jpg"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\uploads\\images\\30f0315f-272e-4b20-ac67-92485cbd6460_ChatGPT Image 13_48_28 5 thg 7, 2025.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\30f0315f-272e-4b20-ac67-92485cbd6460_ChatGPT Image 13_48_28 5 thg 7, 2025.png"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\uploads\\images\\451a70c9-d6a7-4a26-98f2-4a39c2abf2ba_ChatGPT Image 13_48_28 5 thg 7, 2025.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\451a70c9-d6a7-4a26-98f2-4a39c2abf2ba_ChatGPT Image 13_48_28 5 thg 7, 2025.png"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\uploads\\images\\6bcd152f-122f-46f9-baaa-079db569a8fb_ChatGPT Image 13_48_28 5 thg 7, 2025.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\6bcd152f-122f-46f9-baaa-079db569a8fb_ChatGPT Image 13_48_28 5 thg 7, 2025.png"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\uploads\\images\\82069045-dab3-4cc3-89c7-8faaaabb02af_ChatGPT Image 13_48_28 5 thg 7, 2025.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\82069045-dab3-4cc3-89c7-8faaaabb02af_ChatGPT Image 13_48_28 5 thg 7, 2025.png"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\uploads\\images\\98f81a0a-1c77-4bc5-a80c-193055f8d941_ChatGPT Image 13_48_28 5 thg 7, 2025.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\98f81a0a-1c77-4bc5-a80c-193055f8d941_ChatGPT Image 13_48_28 5 thg 7, 2025.png"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\uploads\\images\\9cb11364-d39d-4f83-8a76-8361309426d7_ChatGPT Image 13_48_28 5 thg 7, 2025.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\9cb11364-d39d-4f83-8a76-8361309426d7_ChatGPT Image 13_48_28 5 thg 7, 2025.png"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\uploads\\images\\a7ee4a6c-0ab7-4108-a52f-cd4e6c9fff4d_ChatGPT Image 13_48_28 5 thg 7, 2025.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\a7ee4a6c-0ab7-4108-a52f-cd4e6c9fff4d_ChatGPT Image 13_48_28 5 thg 7, 2025.png"
+    },
+    {
+      "Id": "D:\\Users\\USERHP\\source\\repos\\QE180088_LeTienDung\\ShopNew\\wwwroot\\uploads\\images\\bf4784bb-a863-499f-88ed-eb902a7b1d7d_4cba4e53-cafc-4c31-aa95-c059cf10ef93.png",
+      "PackagePath": "staticwebassets\\uploads\\images\\bf4784bb-a863-499f-88ed-eb902a7b1d7d_4cba4e53-cafc-4c31-aa95-c059cf10ef93.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.ShopNew.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.ShopNew.props",
+      "PackagePath": "build\\ShopNew.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.ShopNew.props",
+      "PackagePath": "buildMultiTargeting\\ShopNew.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.ShopNew.props",
+      "PackagePath": "buildTransitive\\ShopNew.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

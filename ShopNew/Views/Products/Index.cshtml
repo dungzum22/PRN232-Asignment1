@@ -1,0 +1,116 @@
+@model IEnumerable<ShopNew.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">Products</h2>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <form asp-action="Index" method="get" class="d-flex">
+                        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" 
+                               class="form-control me-2" placeholder="Search by product name..." />
+                        <button type="submit" class="btn btn-outline-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"]?.ToString()))
+                        {
+                            <a asp-action="Index" class="btn btn-outline-secondary ms-2">
+                                <i class="fas fa-times"></i> Clear
+                            </a>
+                        }
+                    </form>
+                </div>
+            </div>
+
+            @if (Model.Any())
+            {
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                {
+                                    <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                                }
+                                else
+                                {
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    </div>
+                                }
+                                <div class="card-body">
+                                    <h5 class="card-title">@item.Name</h5>
+                                    <p class="card-text text-muted">
+                                        @if (!string.IsNullOrEmpty(item.Description))
+                                        {
+                                            @if (item.Description.Length > 100)
+                                            {
+                                                @(item.Description.Substring(0, 100))<text>...</text>
+                                            }
+                                            else
+                                            {
+                                                @item.Description
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <em>No description</em>
+                                        }
+                                    </p>
+                                    <div class="text-center">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-eye me-1"></i>Xem thêm
+                                        </a>
+                                    </div>
+                                    <p class="card-text">
+                                        <strong class="text-primary">@item.Price.ToString("N0") VND</strong>
+                                    </p>
+                                </div>
+                                <div class="card-footer bg-transparent p-2">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm px-3">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm px-3">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-box-open fa-4x text-muted mb-4"></i>
+                    @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"]?.ToString()))
+                    {
+                        <h4>No products found</h4>
+                        <p class="text-muted mb-4">No products match your search criteria.</p>
+                        <a asp-action="Index" class="btn btn-primary">
+                            <i class="fas fa-arrow-left me-2"></i>View All Products
+                        </a>
+                    }
+                    else
+                    {
+                        <h4>No products found</h4>
+                        <p class="text-muted mb-4">Start by adding your first product to the catalog.</p>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
