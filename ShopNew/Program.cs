@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using ShopNew.Models;
 
@@ -14,6 +15,16 @@ namespace ShopNew
             builder.Services.AddControllersWithViews();
 
             // MongoDB configuration
+            // Ensure MongoDB does not attempt to serialize transient upload property
+            if (!BsonClassMap.IsClassMapRegistered(typeof(Product)))
+            {
+                BsonClassMap.RegisterClassMap<Product>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.UnmapMember(p => p.ImageFile);
+                });
+            }
+
             var mongoConn = builder.Configuration["Mongo:ConnectionString"] ?? builder.Configuration.GetConnectionString("Mongo");
             var mongoDbName = builder.Configuration["Mongo:DatabaseName"] ?? "ShopNewDb";
             var mongoClient = new MongoClient(mongoConn);
