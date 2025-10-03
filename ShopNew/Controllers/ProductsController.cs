@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ShopNew.Models;
 using System.IO;
 using MongoDB.Driver;
