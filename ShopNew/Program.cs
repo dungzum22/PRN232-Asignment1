@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using ShopNew.Data;
 using Microsoft.AspNetCore.Identity;
+using MongoDB.Driver;
+using ShopNew.Models;
 
 namespace ShopNew
 {
@@ -12,8 +13,14 @@ namespace ShopNew
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+
+            // MongoDB configuration
+            var mongoConn = builder.Configuration["Mongo:ConnectionString"] ?? builder.Configuration.GetConnectionString("Mongo");
+            var mongoDbName = builder.Configuration["Mongo:DatabaseName"] ?? "ShopNewDb";
+            var mongoClient = new MongoClient(mongoConn);
+            builder.Services.AddSingleton<IMongoClient>(mongoClient);
+            builder.Services.AddSingleton(sp => mongoClient.GetDatabase(mongoDbName));
+            builder.Services.AddSingleton<IMongoCollection<Product>>(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<Product>("products"));
 
             var app = builder.Build();
 

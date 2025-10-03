@@ -1,0 +1,48 @@
+# Cursor IDE
+.cursor/
+.cursorignore
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# JetBrains Rider
+.idea/
+
+# Build artifacts
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+
+# .NET
+project.lock.json
+project.fragment.lock.json
+
+# NuGet
+*.nupkg
+*.snupkg
+
+# Logs
+*.log
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+secrets.json
+appsettings.Development.json
+
+# Docker local overrides
+docker-compose.override.yml
+
+# Documents not needed
+README*
+*.md
+LICENSE*
+
+

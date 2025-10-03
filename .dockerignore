@@ -1,0 +1,27 @@
+# Exclude Git and VCS
+.git
+.gitignore
+
+# IDE/editor
+.vs
+.idea
+.cursor
+.cursorignore
+
+# Build artifacts
+bin
+obj
+**/[Dd]ebug
+**/[Rr]elease
+
+# Docker files not needed in context
+docker-compose*.yml
+
+# Misc
+*.md
+README*
+LICENSE*
+*.log
+node_modules
+
+

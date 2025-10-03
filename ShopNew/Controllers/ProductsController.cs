@@ -1,31 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShopNew.Data;
 using ShopNew.Models;
 using System.IO;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace ShopNew.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IMongoCollection<Product> _products;
 
-        public ProductsController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        public ProductsController(IMongoCollection<Product> products) => _products = products;
 
         public async Task<IActionResult> Index(string searchString)
         {
-            var products = from p in _context.Products select p;
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                products = products.Where(p => p.Name.Contains(searchString));
-            }
-
+            var filter = string.IsNullOrWhiteSpace(searchString)
+                ? Builders<Product>.Filter.Empty
+                : Builders<Product>.Filter.Regex(p => p.Name, new BsonRegularExpression(searchString, "i"));
+            var products = await _products.Find(filter).ToListAsync();
             ViewData["CurrentFilter"] = searchString;
-            return View(await products.ToListAsync());
+            return View(products);
         }
 
         public IActionResult Create()
@@ -38,10 +33,8 @@ namespace ShopNew.Controllers
         public async Task<IActionResult> Create(Product product)
         {
             // Check if product name already exists
-            if (await _context.Products.AnyAsync(p => p.Name == product.Name))
-            {
-                ModelState.AddModelError("Name", "A product with this name already exists.");
-            }
+            var exists = await _products.Find(p => p.Name == product.Name).AnyAsync();
+            if (exists) ModelState.AddModelError("Name", "A product with this name already exists.");
 
             if (ModelState.IsValid)
             {
@@ -65,16 +58,15 @@ namespace ShopNew.Controllers
                     product.ImageUrl = "/uploads/images/" + uniqueFileName;
                 }
 
-                _context.Add(product);
-                await _context.SaveChangesAsync();
+                await _products.InsertOneAsync(product);
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
 
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(string id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _products.Find(p => p.Id == id).FirstOrDefaultAsync();
             if (product == null)
             {
                 return NotFound();
@@ -84,7 +76,7 @@ namespace ShopNew.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product)
+        public async Task<IActionResult> Edit(string id, Product product)
         {
             if (id != product.Id)
             {
@@ -92,17 +84,15 @@ namespace ShopNew.Controllers
             }
 
             // Check if product name already exists (excluding current product)
-            if (await _context.Products.AnyAsync(p => p.Name == product.Name && p.Id != id))
-            {
-                ModelState.AddModelError("Name", "A product with this name already exists.");
-            }
+            var nameExists = await _products.Find(p => p.Name == product.Name && p.Id != id).AnyAsync();
+            if (nameExists) ModelState.AddModelError("Name", "A product with this name already exists.");
 
             if (ModelState.IsValid)
             {
                 try
                 {
                     // Get existing product from database
-                    var existingProduct = await _context.Products.FindAsync(id);
+                    var existingProduct = await _products.Find(p => p.Id == id).FirstOrDefaultAsync();
                     if (existingProduct == null)
                     {
                         return NotFound();
@@ -134,28 +124,19 @@ namespace ShopNew.Controllers
                     }
                     // If no new file is provided, keep the existing ImageUrl
 
-                    _context.Update(existingProduct);
-                    await _context.SaveChangesAsync();
+                    var replaceResult = await _products.ReplaceOneAsync(p => p.Id == id, existingProduct);
+                    if (replaceResult.MatchedCount == 0) return NotFound();
                     return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                catch
+                { throw; }
             }
             return View(product);
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(string id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _products.Find(p => p.Id == id).FirstOrDefaultAsync();
             if (product == null)
             {
                 return NotFound();
@@ -163,9 +144,9 @@ namespace ShopNew.Controllers
             return View(product);
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _products.Find(p => p.Id == id).FirstOrDefaultAsync();
             if (product == null)
             {
                 return NotFound();
@@ -175,20 +156,10 @@ namespace ShopNew.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
-            }
+            var result = await _products.DeleteOneAsync(p => p.Id == id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.Id == id);
         }
     }
 }

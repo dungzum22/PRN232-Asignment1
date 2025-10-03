@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ShopNew.Data;
 using ShopNew.Models;
+using MongoDB.Driver;
 
 namespace ShopNew.Controllers.Api
 {
@@ -9,16 +8,16 @@ namespace ShopNew.Controllers.Api
     [Route("api/products")]
     public class ProductsApiController : ControllerBase
     {
-        private readonly ApplicationDbContext _db;
-        public ProductsApiController(ApplicationDbContext db) => _db = db;
+        private readonly IMongoCollection<Product> _products;
+        public ProductsApiController(IMongoCollection<Product> products) => _products = products;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAll() => await _db.Products.ToListAsync();
+        public async Task<ActionResult<IEnumerable<Product>>> GetAll() => await _products.Find(Builders<Product>.Filter.Empty).ToListAsync();
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<ActionResult<Product>> GetById(string id)
         {
-            var p = await _db.Products.FindAsync(id);
+            var p = await _products.Find(x => x.Id == id).FirstOrDefaultAsync();
             if (p == null) return NotFound();
             return p;
         }
@@ -27,33 +26,25 @@ namespace ShopNew.Controllers.Api
         public async Task<ActionResult<Product>> Create(Product product)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
-            _db.Products.Add(product);
-            await _db.SaveChangesAsync();
+            await _products.InsertOneAsync(product);
             return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Product product)
+        public async Task<IActionResult> Update(string id, Product product)
         {
             if (id != product.Id) return BadRequest();
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
-            _db.Entry(product).State = EntityState.Modified;
-            try { await _db.SaveChangesAsync(); }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _db.Products.AnyAsync(e => e.Id == id)) return NotFound();
-                else throw;
-            }
+            var result = await _products.ReplaceOneAsync(p => p.Id == id, product);
+            if (result.MatchedCount == 0) return NotFound();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var p = await _db.Products.FindAsync(id);
-            if (p == null) return NotFound();
-            _db.Products.Remove(p);
-            await _db.SaveChangesAsync();
+            var result = await _products.DeleteOneAsync(p => p.Id == id);
+            if (result.DeletedCount == 0) return NotFound();
             return NoContent();
         }
     }
