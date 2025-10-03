@@ -24,6 +24,7 @@ namespace ShopNew.Models
 
         public string? ImageUrl { get; set; }
 
+        [BsonIgnore]
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public IFormFile? ImageFile { get; set; }
     }

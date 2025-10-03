@@ -57,6 +57,8 @@ namespace ShopNew.Controllers
                     product.ImageUrl = "/uploads/images/" + uniqueFileName;
                 }
 
+                // Prevent MongoDB from attempting to serialize the uploaded form file
+                product.ImageFile = null;
                 await _products.InsertOneAsync(product);
                 return RedirectToAction(nameof(Index));
             }
