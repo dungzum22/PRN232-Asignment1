@@ -13,7 +13,7 @@ RUN dotnet restore ShopNew/ShopNew.csproj
 COPY . .
 RUN dotnet publish ShopNew/ShopNew.csproj -c Release -o /app/publish /p:UseAppHost=false
 
-FROM --platform=${TARGETPLATFORM} mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
