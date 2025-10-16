@@ -37,9 +37,18 @@ namespace ShopNew
             builder.Services.AddSession();
 
             // JWT Configuration
-            var jwtKey = builder.Configuration["Jwt:Key"] ?? builder.Configuration["JWT_KEY"] ?? "your-super-secret-jwt-key-that-should-be-at-least-32-characters-long";
-            var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? builder.Configuration["JWT_ISSUER"] ?? "ShopNew";
-            var jwtAudience = builder.Configuration["Jwt:Audience"] ?? builder.Configuration["JWT_AUDIENCE"] ?? "ShopNew";
+            var jwtKey = builder.Configuration["Jwt:Key"] ?? 
+                        builder.Configuration["JWT_KEY"] ?? 
+                        builder.Configuration["Jwt__Key"] ?? 
+                        throw new InvalidOperationException("JWT Key is not configured. Set Jwt__Key environment variable.");
+            var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? 
+                           builder.Configuration["JWT_ISSUER"] ?? 
+                           builder.Configuration["Jwt__Issuer"] ?? 
+                           "ShopNew";
+            var jwtAudience = builder.Configuration["Jwt:Audience"] ?? 
+                             builder.Configuration["JWT_AUDIENCE"] ?? 
+                             builder.Configuration["Jwt__Audience"] ?? 
+                             "ShopNewUsers";
             
             if (string.IsNullOrEmpty(jwtKey))
             {
