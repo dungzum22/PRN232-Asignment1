@@ -1,0 +1,101 @@
+@model List<ShopNew.Models.Order>
+@{
+    ViewData["Title"] = "Order History";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+        <div>
+            <h2 class="mb-1">Order History</h2>
+            <p class="text-muted mb-0">Track your purchases and payment status</p>
+        </div>
+        <div class="d-flex gap-2 align-items-center">
+            <div class="btn-group" role="group" id="statusFilters">
+                <button type="button" class="btn btn-outline-secondary active" data-status="all">All</button>
+                <button type="button" class="btn btn-outline-secondary" data-status="paid">Paid</button>
+                <button type="button" class="btn btn-outline-secondary" data-status="pending">Pending</button>
+                <button type="button" class="btn btn-outline-secondary" data-status="failed">Failed</button>
+            </div>
+            <div class="input-group" style="max-width: 260px;">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input type="text" class="form-control" id="orderSearch" placeholder="Search order id...">
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="card border-0" style="border:1px solid #e5e7eb;">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle" id="ordersTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Order</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Items</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                var status = (order.Status ?? "").ToLowerInvariant();
+                                var statusClass = order.Status == "Paid" ? "bg-success" : (order.Status == "Pending" ? "bg-warning" : "bg-secondary");
+                                <tr data-status="@status">
+                                    <td>#@order.Id</td>
+                                    <td>@order.CreatedAt.ToString("MMM dd, yyyy HH:mm")</td>
+                                    <td>@(order.Products?.Count ?? 0) item(s)</td>
+                                    <td class="fw-semibold text-primary">@order.TotalAmount.ToString("C")</td>
+                                    <td>
+                                        <span class="badge @statusClass text-white">@order.Status</span>
+                                        @if (!string.IsNullOrEmpty(order.PaymentStatus))
+                                        {
+                                            <div class="small text-muted">Payment: @order.PaymentStatus</div>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+            <p class="lead">You haven't placed any orders yet.</p>
+            <a href="@Url.Action("Index", "Products")" class="btn btn-primary">Start Shopping</a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        (function() {
+            const filters = document.querySelectorAll('#statusFilters button');
+            const rows = Array.from(document.querySelectorAll('#ordersTable tbody tr'));
+            const search = document.getElementById('orderSearch');
+
+            function applyFilters() {
+                const active = document.querySelector('#statusFilters button.active')?.dataset.status || 'all';
+                const term = (search.value || '').trim().toLowerCase();
+                rows.forEach(r => {
+                    const matchesStatus = active === 'all' || r.dataset.status === active;
+                    const matchesSearch = term === '' || r.cells[0].textContent.toLowerCase().includes(term);
+                    r.style.display = matchesStatus && matchesSearch ? '' : 'none';
+                });
+            }
+
+            filters.forEach(btn => btn.addEventListener('click', function() {
+                filters.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                applyFilters();
+            }));
+            search?.addEventListener('input', applyFilters);
+        })();
+    </script>
+}

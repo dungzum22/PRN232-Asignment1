@@ -1,38 +1,42 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using ShopNew.Models;
+using ShopNew.Services;
 using System.IO;
-using MongoDB.Driver;
-using MongoDB.Bson;
 
 namespace ShopNew.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly IMongoCollection<Product> _products;
+        private readonly ProductService _productService;
 
-        public ProductsController(IMongoCollection<Product> products) => _products = products;
+        public ProductsController(ProductService productService) => _productService = productService;
 
         public async Task<IActionResult> Index(string searchString)
         {
-            var filter = string.IsNullOrWhiteSpace(searchString)
-                ? Builders<Product>.Filter.Empty
-                : Builders<Product>.Filter.Regex(p => p.Name, new BsonRegularExpression(searchString, "i"));
-            var products = await _products.Find(filter).ToListAsync();
+            var products = await _productService.GetAllProductsAsync();
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                products = products.Where(p => p.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
             ViewData["CurrentFilter"] = searchString;
             return View(products);
         }
 
+        [Authorize(Policy = "AdminOnly")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
             // Check if product name already exists
-            var exists = await _products.Find(p => p.Name == product.Name).AnyAsync();
+            var products = await _productService.GetAllProductsAsync();
+            var exists = products.Any(p => p.Name == product.Name);
             if (exists) ModelState.AddModelError("Name", "A product with this name already exists.");
 
             if (ModelState.IsValid)
@@ -57,17 +61,20 @@ namespace ShopNew.Controllers
                     product.ImageUrl = "/uploads/images/" + uniqueFileName;
                 }
 
-                // Prevent MongoDB from attempting to serialize the uploaded form file
-                product.ImageFile = null;
-                await _products.InsertOneAsync(product);
+                await _productService.CreateProductAsync(product);
+                if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Products", "Admin");
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
 
-        public async Task<IActionResult> Edit(string id)
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> Edit(int id)
         {
-            var product = await _products.Find(p => p.Id == id).FirstOrDefaultAsync();
+            var product = await _productService.GetProductByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -76,8 +83,9 @@ namespace ShopNew.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, Product product)
+        public async Task<IActionResult> Edit(int id, Product product)
         {
             if (id != product.Id)
             {
@@ -85,7 +93,8 @@ namespace ShopNew.Controllers
             }
 
             // Check if product name already exists (excluding current product)
-            var nameExists = await _products.Find(p => p.Name == product.Name && p.Id != id).AnyAsync();
+            var products = await _productService.GetAllProductsAsync();
+            var nameExists = products.Any(p => p.Name == product.Name && p.Id != id);
             if (nameExists) ModelState.AddModelError("Name", "A product with this name already exists.");
 
             if (ModelState.IsValid)
@@ -93,7 +102,7 @@ namespace ShopNew.Controllers
                 try
                 {
                     // Get existing product from database
-                    var existingProduct = await _products.Find(p => p.Id == id).FirstOrDefaultAsync();
+                    var existingProduct = await _productService.GetProductByIdAsync(id);
                     if (existingProduct == null)
                     {
                         return NotFound();
@@ -103,6 +112,7 @@ namespace ShopNew.Controllers
                     existingProduct.Name = product.Name;
                     existingProduct.Description = product.Description;
                     existingProduct.Price = product.Price;
+                    existingProduct.Stock = product.Stock;
 
                     // Handle file upload - only update if new file is provided
                     if (product.ImageFile != null && product.ImageFile.Length > 0)
@@ -125,8 +135,11 @@ namespace ShopNew.Controllers
                     }
                     // If no new file is provided, keep the existing ImageUrl
 
-                    var replaceResult = await _products.ReplaceOneAsync(p => p.Id == id, existingProduct);
-                    if (replaceResult.MatchedCount == 0) return NotFound();
+                    await _productService.UpdateProductAsync(id, existingProduct);
+                    if (User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("Products", "Admin");
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 catch
@@ -135,9 +148,9 @@ namespace ShopNew.Controllers
             return View(product);
         }
 
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int id)
         {
-            var product = await _products.Find(p => p.Id == id).FirstOrDefaultAsync();
+            var product = await _productService.GetProductByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -145,9 +158,10 @@ namespace ShopNew.Controllers
             return View(product);
         }
 
-        public async Task<IActionResult> Delete(string id)
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var product = await _products.Find(p => p.Id == id).FirstOrDefaultAsync();
+            var product = await _productService.GetProductByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -156,10 +170,15 @@ namespace ShopNew.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "AdminOnly")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var result = await _products.DeleteOneAsync(p => p.Id == id);
+            await _productService.DeleteProductAsync(id);
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Products", "Admin");
+            }
             return RedirectToAction(nameof(Index));
         }
     }

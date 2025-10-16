@@ -1,0 +1,47 @@
+@model List<ShopNew.Models.Product>
+@{
+    ViewData["Title"] = "Manage Products";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Products</h2>
+    <div class="d-flex gap-2">
+        <a href="@Url.Action("Create", "Products")" class="btn btn-primary">Add Product</a>
+        <a href="@Url.Action("Index", "Admin")" class="btn btn-outline-secondary">Back to Dashboard</a>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+            <div class="card h-100 shadow-sm">
+                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                {
+                    <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height: 140px; object-fit: cover;">
+                }
+                else
+                {
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 140px;">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                }
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                        <h6 class="mb-0 text-truncate" title="@item.Name">@item.Name</h6>
+                        <span class="text-primary fw-semibold">@item.Price.ToString("C")</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge @(item.Stock > 0 ? "bg-success" : "bg-danger")">@(item.Stock > 0 ? $"In Stock ({item.Stock})" : "Out of Stock")</span>
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-outline-warning" href="@Url.Action("Edit", "Products", new { id = item.Id })"><i class="fas fa-edit"></i></a>
+                            <a class="btn btn-sm btn-outline-danger" href="@Url.Action("Delete", "Products", new { id = item.Id })"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
