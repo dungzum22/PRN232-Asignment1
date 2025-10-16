@@ -150,7 +150,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var p in (await new ShopNew.Services.ProductService(Context.RequestServices.GetService<ShopNew.Data.ApplicationDbContext>()).GetAllProductsAsync()).Take(8))
+                                @foreach (var p in (await Context.RequestServices.GetService<ShopNew.Services.ProductService>().GetAllProductsAsync()).Take(8))
                                 {
                                     <tr>
                                         <td>@p.Id</td>
