@@ -49,3 +49,4 @@ LICENSE*
 ShopNew/appsettings.json 
 ShopNew/Migrations/ 
 .cunzhi-memory/
+.env 
