@@ -10,8 +10,19 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
+      # Mongo configuration
       - Mongo__ConnectionString=${MONGO_CONNECTION_STRING}
-      - Mongo__DatabaseName=${MONGO_DATABASE_NAME:-ShopNewDb}
+      - Mongo__Database=${MONGO_DATABASE:-ShopNewDb}
+      # Stripe configuration
+      - Stripe__PublishableKey=${STRIPE_PUBLISHABLE_KEY}
+      - Stripe__SecretKey=${STRIPE_SECRET_KEY}
+      - Stripe__WebhookSecret=${STRIPE_WEBHOOK_SECRET}
+      # JWT configuration
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+      # App base URL for redirects
+      - App__BaseUrl=${APP_BASE_URL}
     ports:
       - "80:80"
     networks:
