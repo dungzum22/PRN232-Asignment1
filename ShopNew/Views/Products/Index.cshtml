@@ -4,6 +4,14 @@
     ViewData["Title"] = "Products";
 }
 
+<style>
+    /* Compact product card styles scoped to this page */
+    .product-card .thumb { height: 140px; object-fit: cover; }
+    .product-card .desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.6em; }
+    .product-card .card-body { padding: .75rem; }
+    .product-card .card-footer { padding: .5rem .75rem; }
+</style>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
@@ -35,54 +43,51 @@
                 <div class="row">
                     @foreach (var item in Model)
                     {
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card h-100 shadow-sm">
+                        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+                            <div class="card h-100 shadow-sm product-card">
                                 @if (!string.IsNullOrEmpty(item.ImageUrl))
                                 {
-                                    <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                                    <img src="@item.ImageUrl" class="card-img-top thumb" alt="@item.Name">
                                 }
                                 else
                                 {
-                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center thumb">
                                         <i class="fas fa-image fa-3x text-muted"></i>
                                     </div>
                                 }
                                 <div class="card-body">
-                                    <h5 class="card-title">@item.Name</h5>
-                                    <p class="card-text text-muted">
-                                        @if (!string.IsNullOrEmpty(item.Description))
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <h6 class="card-title mb-0 text-truncate" title="@item.Name">@item.Name</h6>
+                                        <span class="text-primary fw-semibold">@item.Price.ToString("C")</span>
+                                    </div>
+                                    <p class="text-muted small desc mb-2">@(string.IsNullOrEmpty(item.Description) ? "No description" : item.Description)</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-eye me-1"></i>Details
+                                        </a>
+                                        <span class="badge @(item.Stock > 0 ? "bg-success" : "bg-danger")">@(item.Stock > 0 ? $"In Stock ({item.Stock})" : "Out of Stock")</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent">
+                                    <div class="d-flex justify-content-between gap-2">
+                                        @if (User.IsInRole("Admin"))
                                         {
-                                            @if (item.Description.Length > 100)
-                                            {
-                                                @(item.Description.Substring(0, 100))<text>...</text>
-                                            }
-                                            else
-                                            {
-                                                @item.Description
-                                            }
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
                                         }
                                         else
                                         {
-                                            <em>No description</em>
+                                            <form method="post" asp-action="AddToCart" asp-controller="Cart" class="add-to-cart-form" data-product-id="@item.Id" style="display:inline;">
+                                                <input type="hidden" name="productId" value="@item.Id" />
+                                                <button type="submit" class="btn btn-success btn-sm" @(item.Stock <= 0 ? "disabled" : "")>
+                                                    <i class="fas fa-cart-plus me-1"></i>@(item.Stock <= 0 ? "Out of Stock" : "Add to Cart")
+                                                </button>
+                                            </form>
                                         }
-                                    </p>
-                                    <div class="text-center">
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">
-                                            <i class="fas fa-eye me-1"></i>Xem thêm
-                                        </a>
-                                    </div>
-                                    <p class="card-text">
-                                        <strong class="text-primary">@item.Price.ToString("N0") VND</strong>
-                                    </p>
-                                </div>
-                                <div class="card-footer bg-transparent p-2">
-                                    <div class="d-flex justify-content-center gap-2">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm px-3">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm px-3">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -113,4 +118,39 @@
     </div>
 </div>
 
-
+@section Scripts {
+    <script>
+        document.querySelectorAll('.add-to-cart-form').forEach(function(form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const productId = this.dataset.productId;
+                try {
+                    const res = await fetch('/Cart/AddToCart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: new URLSearchParams({ productId, quantity: 1 })
+                    });
+                    const data = await res.json();
+                    if (!res.ok || !data.success) {
+                        const message = data?.error || 'Failed to add to cart';
+                        Swal.fire({ icon: 'error', title: 'Oops...', text: message, timer: 2000, showConfirmButton: false });
+                        return;
+                    }
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: data.message || 'Added to cart',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } catch (err) {
+                    Swal.fire({ icon: 'error', title: 'Error', text: err.message, timer: 2000, showConfirmButton: false });
+                }
+            });
+        });
+    </script>
+}

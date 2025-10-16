@@ -1,7 +1,9 @@
-using Microsoft.AspNetCore.Identity;
-using MongoDB.Bson.Serialization;
-using MongoDB.Driver;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using ShopNew.Models;
+using ShopNew.Services;
+using System.Text;
+using MongoDB.Driver;
 
 namespace ShopNew
 {
@@ -15,22 +17,48 @@ namespace ShopNew
             builder.Services.AddControllersWithViews();
 
             // MongoDB configuration
-            // Ensure MongoDB does not attempt to serialize transient upload property
-            if (!BsonClassMap.IsClassMapRegistered(typeof(Product)))
+            var mongoConnectionString = builder.Configuration["Mongo:ConnectionString"] ?? builder.Configuration.GetConnectionString("Default");
+            var mongoDatabaseName = builder.Configuration["Mongo:Database"] ?? "ShopNewDb";
+            builder.Services.AddSingleton<IMongoClient>(_ => new MongoClient(mongoConnectionString));
+            builder.Services.AddSingleton(provider =>
             {
-                BsonClassMap.RegisterClassMap<Product>(cm =>
-                {
-                    cm.AutoMap();
-                    cm.UnmapMember(p => p.ImageFile);
-                });
-            }
+                var client = provider.GetRequiredService<IMongoClient>();
+                return client.GetDatabase(mongoDatabaseName);
+            });
 
-            var mongoConn = builder.Configuration["Mongo:ConnectionString"] ?? builder.Configuration.GetConnectionString("Mongo");
-            var mongoDbName = builder.Configuration["Mongo:DatabaseName"] ?? "ShopNewDb";
-            var mongoClient = new MongoClient(mongoConn);
-            builder.Services.AddSingleton<IMongoClient>(mongoClient);
-            builder.Services.AddSingleton(sp => mongoClient.GetDatabase(mongoDbName));
-            builder.Services.AddSingleton<IMongoCollection<Product>>(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<Product>("products"));
+            builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<CartService>();
+            builder.Services.AddScoped<PaymentService>();
+            builder.Services.AddScoped<ProductService>();
+            builder.Services.AddScoped<OrderService>();
+            builder.Services.AddScoped<UserService>();
+            builder.Services.AddSingleton<MongoSequenceService>();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSession();
+
+            // JWT Configuration
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                    };
+                });
+
+            // Authorization Policies
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole(UserRoles.Admin));
+                options.AddPolicy("UserOrAdmin", policy => policy.RequireRole(UserRoles.User, UserRoles.Admin));
+            });
 
             var app = builder.Build();
 
@@ -46,7 +74,9 @@ namespace ShopNew
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
+            app.UseMiddleware<Middleware.JwtCookieAuthenticationMiddleware>();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

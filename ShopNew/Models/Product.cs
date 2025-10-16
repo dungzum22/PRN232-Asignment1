@@ -1,15 +1,16 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ShopNew.Models
 {
     public class Product
     {
+        [Key]
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = string.Empty;
+        [BsonElement("_id")]
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Product name is required")]
         [StringLength(100, ErrorMessage = "Product name cannot exceed 100 characters")]
@@ -22,10 +23,13 @@ namespace ShopNew.Models
         [Range(0.01, double.MaxValue)]
         public decimal Price { get; set; }
 
+        [Required]
+        [Range(0, int.MaxValue)]
+        public int Stock { get; set; } = 0;
+
         public string? ImageUrl { get; set; }
 
-        [BsonIgnore]
-        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        [NotMapped]
         public IFormFile? ImageFile { get; set; }
     }
 }

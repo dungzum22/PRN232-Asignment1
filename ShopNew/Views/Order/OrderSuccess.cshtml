@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Order Success";
+}
+
+<div class="text-center">
+    <div class="mb-4">
+        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+    </div>
+    <h2 class="text-success">Order Placed Successfully!</h2>
+    <p class="lead">Thank you for your purchase. Your order has been received.</p>
+    <p><strong>Order ID:</strong> @ViewBag.OrderId</p>
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "Products")" class="btn btn-primary me-2">Continue Shopping</a>
+        <a href="@Url.Action("History", "Order")" class="btn btn-outline-primary">View Order History</a>
+    </div>
+</div>

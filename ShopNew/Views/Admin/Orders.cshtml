@@ -1,0 +1,62 @@
+@model List<ShopNew.Models.Order>
+@{
+    ViewData["Title"] = "Order Management";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Order Management</h2>
+        <a href="@Url.Action("Index")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>User ID</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Payment Status</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td>@order.Id</td>
+                                <td>@order.UserId</td>
+                                <td>@order.Products.Count item(s)</td>
+                                <td>@order.TotalAmount.ToString("C")</td>
+                                <td>
+                                    <span class="badge @(order.Status == "Paid" ? "bg-success" : order.Status == "Pending" ? "bg-warning" : "bg-secondary")">
+                                        @order.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(order.PaymentStatus))
+                                    {
+                                        <span class="badge @(order.PaymentStatus == "succeeded" ? "bg-success" : "bg-warning")">
+                                            @order.PaymentStatus
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>@order.CreatedAt.ToString("MMM dd, yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

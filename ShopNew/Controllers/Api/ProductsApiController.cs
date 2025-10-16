@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ShopNew.Models;
-using MongoDB.Driver;
+using ShopNew.Services;
 
 namespace ShopNew.Controllers.Api
 {
@@ -8,16 +8,16 @@ namespace ShopNew.Controllers.Api
     [Route("api/products")]
     public class ProductsApiController : ControllerBase
     {
-        private readonly IMongoCollection<Product> _products;
-        public ProductsApiController(IMongoCollection<Product> products) => _products = products;
+        private readonly ProductService _productService;
+        public ProductsApiController(ProductService productService) => _productService = productService;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAll() => await _products.Find(Builders<Product>.Filter.Empty).ToListAsync();
+        public async Task<ActionResult<IEnumerable<Product>>> GetAll() => await _productService.GetAllProductsAsync();
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetById(string id)
+        public async Task<ActionResult<Product>> GetById(int id)
         {
-            var p = await _products.Find(x => x.Id == id).FirstOrDefaultAsync();
+            var p = await _productService.GetProductByIdAsync(id);
             if (p == null) return NotFound();
             return p;
         }
@@ -26,25 +26,25 @@ namespace ShopNew.Controllers.Api
         public async Task<ActionResult<Product>> Create(Product product)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
-            await _products.InsertOneAsync(product);
-            return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
+            var created = await _productService.CreateProductAsync(product);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, Product product)
+        public async Task<IActionResult> Update(int id, Product product)
         {
             if (id != product.Id) return BadRequest();
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
-            var result = await _products.ReplaceOneAsync(p => p.Id == id, product);
-            if (result.MatchedCount == 0) return NotFound();
+            var updated = await _productService.UpdateProductAsync(id, product);
+            if (updated == null) return NotFound();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = await _products.DeleteOneAsync(p => p.Id == id);
-            if (result.DeletedCount == 0) return NotFound();
+            var deleted = await _productService.DeleteProductAsync(id);
+            if (!deleted) return NotFound();
             return NoContent();
         }
     }
