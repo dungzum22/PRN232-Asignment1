@@ -3,48 +3,47 @@ using ShopNew.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using MongoDB.Driver;
+using ShopNew.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShopNew.Services
 {
     public class AuthService
     {
-        private readonly IMongoCollection<User> _users;
+        private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
-        private readonly MongoSequenceService _sequenceService;
 
-        public AuthService(IMongoDatabase database, IConfiguration configuration, MongoSequenceService sequenceService)
+        public AuthService(ApplicationDbContext context, IConfiguration configuration)
         {
-            _users = database.GetCollection<User>("users");
+            _context = context;
             _configuration = configuration;
-            _sequenceService = sequenceService;
         }
 
         public async Task<User?> RegisterAsync(string email, string password)
         {
-            var existingUser = await _users.Find(u => u.Email == email).FirstOrDefaultAsync();
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (existingUser != null) return null;
 
             // Check if this is the first user (make them admin)
-            var userCount = await _users.CountDocumentsAsync(Builders<User>.Filter.Empty);
+            var userCount = await _context.Users.CountAsync();
             var isFirstUser = userCount == 0;
 
             var user = new User
             {
-                Id = await _sequenceService.GetNextSequenceAsync("users"),
                 Email = email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
                 Role = isFirstUser ? UserRoles.Admin : UserRoles.User,
                 CreatedAt = DateTime.UtcNow
             };
 
-            await _users.InsertOneAsync(user);
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
             return user;
         }
 
         public async Task<User?> LoginAsync(string email, string password)
         {
-            var user = await _users.Find(u => u.Email == email).FirstOrDefaultAsync();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
                 return null;
 

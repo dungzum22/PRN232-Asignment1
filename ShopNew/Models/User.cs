@@ -1,14 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace ShopNew.Models
 {
     public class User
     {
         [Key]
-        [BsonId]
-        [BsonElement("_id")]
         public int Id { get; set; }
         
         [Required]

@@ -3,7 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 using ShopNew.Models;
 using ShopNew.Services;
 using System.Text;
-using MongoDB.Driver;
+using Microsoft.EntityFrameworkCore;
+using ShopNew.Data;
 
 namespace ShopNew
 {
@@ -16,15 +17,13 @@ namespace ShopNew
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            // MongoDB configuration
-            var mongoConnectionString = builder.Configuration["Mongo:ConnectionString"] ?? builder.Configuration.GetConnectionString("Default");
-            var mongoDatabaseName = builder.Configuration["Mongo:Database"] ?? "ShopNewDb";
-            builder.Services.AddSingleton<IMongoClient>(_ => new MongoClient(mongoConnectionString));
-            builder.Services.AddSingleton(provider =>
-            {
-                var client = provider.GetRequiredService<IMongoClient>();
-                return client.GetDatabase(mongoDatabaseName);
-            });
+            // PostgreSQL configuration
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? 
+                                 builder.Configuration.GetConnectionString("Default") ??
+                                 throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(connectionString));
 
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddScoped<CartService>();
@@ -32,7 +31,6 @@ namespace ShopNew
             builder.Services.AddScoped<ProductService>();
             builder.Services.AddScoped<OrderService>();
             builder.Services.AddScoped<UserService>();
-            builder.Services.AddSingleton<MongoSequenceService>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddSession();
 
@@ -79,6 +77,13 @@ namespace ShopNew
             });
 
             var app = builder.Build();
+
+            // Apply database migrations automatically
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                context.Database.Migrate();
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

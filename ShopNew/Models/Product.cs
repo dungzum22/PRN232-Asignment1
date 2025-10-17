@@ -1,15 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace ShopNew.Models
 {
     public class Product
     {
         [Key]
-        [BsonId]
-        [BsonElement("_id")]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Product name is required")]

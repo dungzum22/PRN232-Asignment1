@@ -1,44 +1,51 @@
 using ShopNew.Models;
-using MongoDB.Driver;
+using ShopNew.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShopNew.Services
 {
     public class UserService
     {
-        private readonly IMongoCollection<User> _users;
+        private readonly ApplicationDbContext _context;
 
-        public UserService(IMongoDatabase database)
+        public UserService(ApplicationDbContext context)
         {
-            _users = database.GetCollection<User>("users");
+            _context = context;
         }
 
         public async Task<List<User>> GetAllUsersAsync()
         {
-            return await _users.Find(Builders<User>.Filter.Empty).ToListAsync();
+            return await _context.Users.ToListAsync();
         }
 
         public async Task<User?> GetUserByIdAsync(int id)
         {
-            return await _users.Find(u => u.Id == id).FirstOrDefaultAsync();
+            return await _context.Users.FindAsync(id);
         }
 
         public async Task<bool> UpdateUserRoleAsync(int userId, string newRole)
         {
-            var update = Builders<User>.Update.Set(u => u.Role, newRole);
-            var result = await _users.UpdateOneAsync(u => u.Id == userId, update);
-            return result.ModifiedCount > 0;
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+            
+            user.Role = newRole;
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> DeleteUserAsync(int userId)
         {
-            var result = await _users.DeleteOneAsync(u => u.Id == userId);
-            return result.DeletedCount > 0;
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+            
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<int> GetTotalUsersCountAsync()
         {
-            var count = await _users.CountDocumentsAsync(Builders<User>.Filter.Empty);
-            return (int)count;
+            return await _context.Users.CountAsync();
         }
     }
 }

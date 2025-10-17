@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ShopNew.Services;
+using ShopNew.Models;
 
 namespace ShopNew.Controllers
 {
@@ -20,10 +21,19 @@ namespace ShopNew.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
-            var user = await _authService.LoginAsync(email, password);
-            if (user == null)
+            User? user;
+            try
             {
-                ModelState.AddModelError("", "Invalid email or password");
+                user = await _authService.LoginAsync(email, password);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Invalid email or password");
+                    return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Database error: {ex.Message}");
                 return View();
             }
 
@@ -31,8 +41,8 @@ namespace ShopNew.Controllers
             Response.Cookies.Append("AuthToken", token, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict
+                Secure = Request.IsHttps, // Only secure in HTTPS
+                SameSite = SameSiteMode.Lax // Less strict for development
             });
 
             if (user.Role == "Admin")
@@ -56,10 +66,18 @@ namespace ShopNew.Controllers
                 return View();
             }
 
-            var user = await _authService.RegisterAsync(email, password);
-            if (user == null)
+            try
             {
-                ModelState.AddModelError("", "Email already exists");
+                var user = await _authService.RegisterAsync(email, password);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Email already exists");
+                    return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Database error: {ex.Message}");
                 return View();
             }
 

@@ -32,21 +32,13 @@ project.fragment.lock.json
 
 # Environment & secrets
 .env
-.env.local
-.env.*.local
+.env.*
 secrets.json
-appsettings.Development.json
+appsettings.json
+appsettings.*.json
 
 # Docker local overrides
 docker-compose.override.yml
 
-# Documents not needed
-README*
-*.md
-LICENSE*
-
-
-ShopNew/appsettings.json 
-ShopNew/Migrations/ 
+# Memory files
 .cunzhi-memory/
-.env 

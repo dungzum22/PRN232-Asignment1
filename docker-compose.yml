@@ -1,6 +1,25 @@
 version: "3.9"
 
 services:
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-ShopNewDb}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   webapp:
     build:
       context: .
@@ -10,9 +29,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
-      # Mongo configuration
-      - Mongo__ConnectionString=${MONGO_CONNECTION_STRING}
-      - Mongo__Database=${MONGO_DATABASE:-ShopNewDb}
+      # PostgreSQL configuration
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=${POSTGRES_DB:-ShopNewDb};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD}
       # Stripe configuration
       - Stripe__PublishableKey=${STRIPE_PUBLISHABLE_KEY}
       - Stripe__SecretKey=${STRIPE_SECRET_KEY}
@@ -25,9 +43,15 @@ services:
       - App__BaseUrl=${APP_BASE_URL}
     ports:
       - "80:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - app-network
     restart: unless-stopped
+
+volumes:
+  postgres_data:
 
 networks:
   app-network:

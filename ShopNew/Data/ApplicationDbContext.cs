@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using ShopNew.Models;
 
 namespace ShopNew.Data
@@ -63,6 +64,18 @@ namespace ShopNew.Data
                     .HasForeignKey(e => e.ProductId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+        }
+    }
+
+    // Design-time factory for migrations
+    public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+    {
+        public ApplicationDbContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseNpgsql("Host=localhost;Database=ShopNewDb;Username=postgres;Password=123");
+
+            return new ApplicationDbContext(optionsBuilder.Options);
         }
     }
 }

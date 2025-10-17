@@ -1,13 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace ShopNew.Models
 {
     public class CartItem
     {
         [Key]
-        [BsonId]
-        [BsonElement("_id")]
         public int Id { get; set; }
         
         public int ProductId { get; set; }
