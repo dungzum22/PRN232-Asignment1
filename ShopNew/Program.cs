@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using ShopNew.Models;
 using ShopNew.Services;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopNew.Data;
 using Microsoft.AspNetCore.DataProtection;
@@ -16,7 +17,10 @@ namespace ShopNew
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+    {
+        options.Filters.Add(new IgnoreAntiforgeryTokenAttribute());
+    });
 
             // PostgreSQL configuration
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? 
