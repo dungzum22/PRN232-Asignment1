@@ -40,11 +40,29 @@ namespace ShopNew
                 .PersistKeysToDbContext<ApplicationDbContext>()
                 .SetApplicationName("ShopNew");
 
-            // JWT Configuration
+            // JWT Configuration with improved error handling
             var jwtKey = builder.Configuration["Jwt:Key"] ?? 
                         builder.Configuration["JWT_KEY"] ?? 
-                        builder.Configuration["Jwt__Key"] ?? 
-                        throw new InvalidOperationException("JWT Key is not configured. Set Jwt__Key environment variable.");
+                        builder.Configuration["Jwt__Key"];
+                        
+            // Debug logging for JWT configuration (remove in production)
+            Console.WriteLine($"JWT Key found: {!string.IsNullOrEmpty(jwtKey)}");
+            Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
+            
+            if (string.IsNullOrWhiteSpace(jwtKey))
+            {
+                // Generate a temporary key for development if none is provided
+                if (builder.Environment.IsDevelopment())
+                {
+                    jwtKey = "TempDevKey123456789012345678901234567890123456789012345678901234567890";
+                    Console.WriteLine("WARNING: Using temporary JWT key for development!");
+                }
+                else
+                {
+                    throw new InvalidOperationException("JWT Key is not configured. Please set Jwt__Key environment variable.");
+                }
+            }
+            
             var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? 
                            builder.Configuration["JWT_ISSUER"] ?? 
                            builder.Configuration["Jwt__Issuer"] ?? 
@@ -53,11 +71,6 @@ namespace ShopNew
                              builder.Configuration["JWT_AUDIENCE"] ?? 
                              builder.Configuration["Jwt__Audience"] ?? 
                              "ShopNewUsers";
-            
-            if (string.IsNullOrEmpty(jwtKey))
-            {
-                throw new InvalidOperationException("JWT Key is not configured. Please set Jwt:Key in configuration.");
-            }
             
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -71,7 +84,7 @@ namespace ShopNew
                         ValidIssuer = jwtIssuer,
                         ValidAudience = jwtAudience,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(jwtKey))
+                            Encoding.UTF8.GetBytes(jwtKey ?? throw new InvalidOperationException("JWT Key is null")))
                     };
                 });
 
