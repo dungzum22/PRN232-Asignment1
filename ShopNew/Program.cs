@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ShopNew.Models;
 using ShopNew.Services;
@@ -15,7 +16,10 @@ namespace ShopNew
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new IgnoreAntiforgeryTokenAttribute());
+            });
 
             // PostgreSQL configuration
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? 
