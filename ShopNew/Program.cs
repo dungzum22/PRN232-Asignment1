@@ -5,6 +5,7 @@ using ShopNew.Services;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using ShopNew.Data;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace ShopNew
 {
@@ -33,6 +34,11 @@ namespace ShopNew
             builder.Services.AddScoped<UserService>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddSession();
+            
+            // Configure Data Protection to use database for key storage
+            builder.Services.AddDataProtection()
+                .PersistKeysToDbContext<ApplicationDbContext>()
+                .SetApplicationName("ShopNew");
 
             // JWT Configuration
             var jwtKey = builder.Configuration["Jwt:Key"] ?? 

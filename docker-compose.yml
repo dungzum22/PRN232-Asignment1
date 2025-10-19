@@ -8,7 +8,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data # Persistent storage for database and Data Protection keys
     ports:
       - "5432:5432"
     networks:
@@ -56,5 +56,3 @@ volumes:
 networks:
   app-network:
     driver: bridge
-
-
