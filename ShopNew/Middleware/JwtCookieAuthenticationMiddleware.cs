@@ -26,7 +26,7 @@ namespace ShopNew.Middleware
                 try
                 {
                     var tokenHandler = new JwtSecurityTokenHandler();
-                    var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+                    var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(GetJwtSetting("Key")));
                     
                     var validationParameters = new TokenValidationParameters
                     {
@@ -34,8 +34,8 @@ namespace ShopNew.Middleware
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = _configuration["Jwt:Issuer"],
-                        ValidAudience = _configuration["Jwt:Audience"],
+                        ValidIssuer = GetJwtSetting("Issuer", "ShopNew"),
+                        ValidAudience = GetJwtSetting("Audience", "ShopNewUsers"),
                         IssuerSigningKey = key
                     };
 
@@ -50,6 +50,21 @@ namespace ShopNew.Middleware
             }
 
             await _next(context);
+        }
+
+        private string GetJwtSetting(string name, string? defaultValue = null)
+        {
+            var value = _configuration[$"Jwt:{name}"] ??
+                        _configuration[$"JWT_{name.ToUpperInvariant()}"] ??
+                        _configuration[$"Jwt__{name}"] ??
+                        defaultValue;
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidOperationException($"JWT {name} is not configured. Please set Jwt:{name} in configuration or provide JWT_{name.ToUpperInvariant()} environment variable.");
+            }
+
+            return value;
         }
     }
 }

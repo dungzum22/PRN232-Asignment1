@@ -12,11 +12,17 @@ namespace ShopNew.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly string _jwtKey;
+        private readonly string _jwtIssuer;
+        private readonly string _jwtAudience;
 
         public AuthService(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
+            _jwtKey = GetJwtSetting("Key");
+            _jwtIssuer = GetJwtSetting("Issuer", "ShopNew");
+            _jwtAudience = GetJwtSetting("Audience", "ShopNewUsers");
         }
 
         public async Task<User?> RegisterAsync(string email, string password)
@@ -52,7 +58,7 @@ namespace ShopNew.Services
 
         public string GenerateJwtToken(User user)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
@@ -63,14 +69,29 @@ namespace ShopNew.Services
             };
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _jwtIssuer,
+                audience: _jwtAudience,
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(24),
                 signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private string GetJwtSetting(string name, string? defaultValue = null)
+        {
+            var value = _configuration[$"Jwt:{name}"] ??
+                        _configuration[$"JWT_{name.ToUpperInvariant()}"] ??
+                        _configuration[$"Jwt__{name}"] ??
+                        defaultValue;
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidOperationException($"JWT {name} is not configured. Please set Jwt:{name} in configuration or provide JWT_{name.ToUpperInvariant()} environment variable.");
+            }
+
+            return value;
         }
     }
 }
